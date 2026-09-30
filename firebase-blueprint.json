@@ -1,0 +1,148 @@
+{
+  "entities": {
+    "SkipassVoucher": {
+      "title": "Skipass & Package Voucher",
+      "description": "Vouchers issued for B2B hotel partners (skipass or vacation packages)",
+      "type": "object",
+      "properties": {
+        "voucherCategory": {
+          "type": "string",
+          "enum": ["skipass", "package"],
+          "description": "Category of the voucher"
+        },
+        "voucherCode": {
+          "type": "string",
+          "maxLength": 64,
+          "description": "Unique alphanumeric code with QR code"
+        },
+        "guestName": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "Name of guest or family"
+        },
+        "guestCount": {
+          "type": "number",
+          "description": "Number of guests"
+        },
+        "accommodationName": {
+          "type": "string",
+          "maxLength": 150,
+          "description": "Hotel or partner property name"
+        },
+        "partnerCode": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "Unique partner hotel identification code"
+        },
+        "skipassType": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "Duration/type of pass"
+        },
+        "coverage": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "Territorial coverage"
+        },
+        "selectedRegion": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "Regional zone name if applicable"
+        },
+        "packageName": {
+          "type": "string",
+          "maxLength": 200,
+          "description": "Name of package if package category"
+        },
+        "stayDates": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "Dates of stay"
+        },
+        "includedServices": {
+          "type": "string",
+          "maxLength": 500,
+          "description": "Included services details"
+        },
+        "regionName": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "Region name for package"
+        },
+        "validFrom": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "Start validity date"
+        },
+        "validTo": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "End validity date"
+        },
+        "totalPrice": {
+          "type": "number",
+          "description": "Total price or value in Euros"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["issued", "redeemed", "cancelled"],
+          "description": "Current voucher status"
+        },
+        "createdAt": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "Creation timestamp"
+        },
+        "qrCodeUrl": {
+          "type": "string",
+          "maxLength": 500,
+          "description": "URL to generated QR code image"
+        }
+      },
+      "required": ["voucherCode", "guestName", "accommodationName", "partnerCode", "totalPrice", "status", "createdAt"]
+    },
+    "ContactMessage": {
+      "title": "Contact Form Submission",
+      "description": "Messages submitted via B2B partner contact form",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "Full name or property name"
+        },
+        "email": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "Email address"
+        },
+        "message": {
+          "type": "string",
+          "maxLength": 2000,
+          "description": "Message content"
+        },
+        "createdAt": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "Submission timestamp"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["new", "read", "processed"],
+          "description": "Message processing status"
+        }
+      },
+      "required": ["name", "email", "message", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/vouchers/{voucherId}": {
+      "schema": { "$ref": "#/entities/SkipassVoucher" },
+      "description": "Collection of all issued vouchers and package confirmations"
+    },
+    "/contactMessages/{messageId}": {
+      "schema": { "$ref": "#/entities/ContactMessage" },
+      "description": "Collection of partner inquiry messages"
+    }
+  }
+}

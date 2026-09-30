@@ -1,0 +1,60 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isSignedIn() { return request.auth != null; }
+    function isAdmin() { return isSignedIn() && request.auth.token.role == 'admin'; }
+    // function ownsPartner(pc) { return isSignedIn() && request.auth.token.partnerCode == pc; }
+
+    function isValidId(id) { return id is string && id.size() <= 128; }
+    function incoming() { return request.resource.data; }
+
+    function isValidVoucher(data) {
+      return data.keys().hasAll(['voucherCode', 'guestName', 'accommodationName', 'partnerCode', 'totalPrice', 'status', 'createdAt']) &&
+        data.voucherCode is string && data.voucherCode.size() <= 64 &&
+        data.guestName is string && data.guestName.size() <= 100 &&
+        data.accommodationName is string && data.accommodationName.size() <= 150 &&
+        data.partnerCode is string && data.partnerCode.size() <= 50 &&
+        (data.totalPrice is number || data.totalPrice is int) &&
+        data.status in ['issued', 'redeemed', 'cancelled'] &&
+        data.createdAt is string && data.createdAt.size() <= 50;
+    }
+
+    function isValidContactMessage(data) {
+      return data.keys().hasAll(['name', 'email', 'message', 'createdAt']) &&
+        data.name is string && data.name.size() <= 100 &&
+        data.email is string && data.email.size() <= 100 &&
+        data.message is string && data.message.size() <= 2000 &&
+        data.createdAt is string && data.createdAt.size() <= 50;
+    }
+
+    // Default deny all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Vouchers collection (dati personali - accessibili solo a utenti autenticati)
+    match /vouchers/{voucherId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && isValidId(voucherId) && isValidVoucher(incoming());
+      allow update: if isSignedIn() && isValidId(voucherId) && isValidVoucher(incoming());
+      allow delete: if isSignedIn(); // consente il diritto all'oblio (art. 17 GDPR)
+    }
+
+    // Contact messages collection (solo admin legge, chiunque puo inviare)
+    match /contactMessages/{messageId} {
+      allow read: if isAdmin();
+      allow create: if isValidId(messageId) && isValidContactMessage(incoming());
+      allow update: if false;
+      allow delete: if isAdmin();
+    }
+
+    // Downloads / Custom Material Boxes collection (asset marketing non riservati)
+    match /downloads/{downloadId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin() && isValidId(downloadId);
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Dolomiti NordicSki - Portale Partner",
+  "description": "Portale B2B e sistema di gestione voucher skipass per le strutture ricettive e partner di Dolomiti NordicSki",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

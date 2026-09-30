@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+:root {
+  --dns-primary: #0D4D5E;
+  --dns-deep: #083845;
+  --dns-teal: #417483;
+  --dns-soft: #AAD0D1;
+  --dns-bg: #F4F9F9;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #083845;
+  color: #F4F9F9;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Be Vietnam Pro', sans-serif;
+}
+
+.bg-dns-primary { background-color: var(--dns-primary); }
+.bg-dns-deep { background-color: var(--dns-deep); }
+.bg-dns-teal { background-color: var(--dns-teal); }
+.bg-dns-soft { background-color: var(--dns-soft); }
+.bg-dns-bg { background-color: var(--dns-bg); }
+
+.text-dns-primary { color: var(--dns-primary); }
+.text-dns-deep { color: var(--dns-deep); }
+.text-dns-teal { color: var(--dns-teal); }
+.text-dns-soft { color: var(--dns-soft); }
+.text-dns-bg { color: var(--dns-bg); }
+
+.border-dns-primary { border-color: var(--dns-primary); }
+.border-dns-deep { border-color: var(--dns-deep); }
+.border-dns-teal { border-color: var(--dns-teal); }
+.border-dns-soft { border-color: var(--dns-soft); }
+
+/* Print Styles for Official Dolomiti NordicSki Voucher Layout */
+@media print {
+  body {
+    background-color: #ffffff !important;
+    color: #083845 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    font-size: 12pt !important;
+  }
+
+  header, footer, nav, button, form, .no-print, [role="dialog"], .sticky, .lg\:col-span-7 {
+    display: none !important;
+  }
+
+  main, section {
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .printable-voucher-card {
+    display: block !important;
+    position: relative !important;
+    width: 100% !important;
+    max-width: 780px !important;
+    margin: 10px auto !important;
+    padding: 28px !important;
+    border: 3px solid #0D4D5E !important;
+    border-radius: 16px !important;
+    background-color: #ffffff !important;
+    color: #083845 !important;
+    box-shadow: none !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .printable-voucher-card * {
+    color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
+
