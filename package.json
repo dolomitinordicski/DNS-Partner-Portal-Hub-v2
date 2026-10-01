@@ -23,7 +23,8 @@
     "qrcode": "^1.5.4",
     "react": "^19.0.1",
     "react-dom": "^19.0.1",
-    "vite": "^6.2.3"
+    "vite": "^6.2.3",
+    "@dolomitinordicski/dns-shared-data": "github:dolomitinordicski/dns-shared-data#032c9b355955f1a62e401133ece681cbf05a4eb9"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
