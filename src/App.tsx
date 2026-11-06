@@ -126,7 +126,7 @@ export default function App() {
 
         {/* WIDGET & EMBED GENERATOR TAB */}
         {activeTab === 'widgets' && (
-          <div className="py-12 bg-[#052832] text-white min-h-screen">
+          <div className="py-12 bg-[var(--color-dns-primary-dark)] text-white min-h-screen">
             <div className="max-w-7xl mx-auto px-4 sm:px-8 space-y-6">
               <WidgetCreator lang={lang} accessLevel={accessLevel} />
             </div>
@@ -136,14 +136,14 @@ export default function App() {
         {/* Legacy modules isolated until DNS Core authorization is ready. */}
         {(activeTab === 'voucher-system' || activeTab === 'regional-tools') && (
           <section className="max-w-3xl mx-auto px-4 sm:px-8 py-16" role="status">
-            <div className="rounded-2xl border border-[#82B2BD]/40 bg-white p-8 text-[#083845] shadow-sm space-y-4">
+            <div className="rounded-2xl border border-[var(--color-dns-light)]/40 bg-white p-8 text-[var(--color-dns-primary-dark)] shadow-sm space-y-4">
               <h1 className="text-2xl font-bold">
                 {lang === 'de' ? 'Modul in Vorbereitung' : lang === 'it' ? 'Modulo in preparazione' : 'Module in preparation'}
               </h1>
               <p>
                 {lang === 'de' ? 'Dieses Modul wird erst nach der sicheren Anbindung an DNS Core freigeschaltet.' : lang === 'it' ? 'Questo modulo sarà disponibile dopo il collegamento sicuro a DNS Core.' : 'This module will become available after secure integration with DNS Core.'}
               </p>
-              <button type="button" onClick={() => setActiveTab('home')} className="rounded-lg bg-[#0D4D5E] px-5 py-3 text-white font-semibold">
+              <button type="button" onClick={() => setActiveTab('home')} className="rounded-lg bg-[var(--color-dns-primary-dark)] px-5 py-3 text-white font-semibold">
                 {lang === 'de' ? 'Zur Startseite' : lang === 'it' ? 'Torna alla home' : 'Back to home'}
               </button>
             </div>
