@@ -690,138 +690,91 @@ export const INITIAL_VOUCHERS: SkipassVoucher[] = [
   }
 ];
 
+// Planned catalog categories only: no file metadata is asserted without a verified source.
 export const DOWNLOAD_ITEMS: DownloadItem[] = [
   {
     id: 'dl-cd-manual',
-    title: {
-      de: 'Offizielles Corporate Design Handbuch 2025/2026',
-      it: 'Manuale Ufficiale Corporate Design 2025/2026',
-      en: 'Official Corporate Design Manual 2025/2026'
-    },
     category: 'brand-manual',
-    fileType: 'PDF',
-    fileSize: '14.8 MB',
-    updatedAt: {
-      de: 'Oktober 2025',
-      it: 'Ottobre 2025',
-      en: 'October 2025'
-    },
+    title: { de: 'Corporate-Design-Richtlinien', it: 'Linee guida Corporate Design', en: 'Corporate Design guidelines' },
+    fileType: '',
+    fileSize: '',
+    updatedAt: '',
     description: {
-      de: 'Vollständige offizielle Richtlinien zu Corporate Identity, Logonutzungsregeln, Schriften, Farben und Co-Branding für Beherbergungsbetriebe.',
-      it: 'Linee guida ufficiali complete su Corporate Identity, regole d\'uso del marchio, font tipografici, colori e co-branding per strutture ricettive.',
-      en: 'Complete guidelines on Corporate Identity, brand rules, typography, colours, and partner co-branding.'
+      de: 'Geplante Ressource. Derzeit liegt kein verifizierter Dateilink vor.',
+      it: 'Risorsa prevista. Al momento non è disponibile un collegamento verificato al file.',
+      en: 'Planned resource. No verified file link is currently available.'
     },
-    downloadUrl: '#'
+    downloadUrl: ''
   },
   {
     id: 'dl-logo-pack-vector',
-    title: {
-      de: 'Vektor Master-Logopaket (EPS / SVG / PDF)',
-      it: 'Vector Master Logo Pack (EPS / SVG / PDF)',
-      en: 'Vector Master Logo Pack (EPS / SVG / PDF)'
-    },
     category: 'logos',
-    fileType: 'ZIP',
-    fileSize: '18.2 MB',
-    updatedAt: {
-      de: 'November 2025',
-      it: 'Novembre 2025',
-      en: 'November 2025'
-    },
+    title: { de: 'Vektorlogos', it: 'Loghi vettoriali', en: 'Vector logos' },
+    fileType: '',
+    fileSize: '',
+    updatedAt: '',
     description: {
-      de: 'Vollständiges Paket hochauflösender Vektorlogos für professionellen Druck, Druckereien und Beschilderung.',
-      it: 'Pacchetto completo loghi vettoriali ad alta definizione per stampa professionale, tipografie e cartellonistica.',
-      en: 'Full vector logo package in high resolution for professional print and sign making.'
+      de: 'Geplante Ressource. Derzeit liegt kein verifizierter Dateilink vor.',
+      it: 'Risorsa prevista. Al momento non è disponibile un collegamento verificato al file.',
+      en: 'Planned resource. No verified file link is currently available.'
     },
-    downloadUrl: '#'
+    downloadUrl: ''
   },
   {
     id: 'dl-logo-web-png',
-    title: {
-      de: 'Logopaket für Websites & Digital (PNG Transparent / WebP)',
-      it: 'Logo Pack per Siti Web e Digital (PNG Trasparente / WebP)',
-      en: 'Logo Pack for Websites & Digital (Transparent PNG / WebP)'
-    },
     category: 'logos',
-    fileType: 'ZIP',
-    fileSize: '8.4 MB',
-    updatedAt: {
-      de: 'November 2025',
-      it: 'Novembre 2025',
-      en: 'November 2025'
-    },
+    title: { de: 'Weblogos', it: 'Loghi per il web', en: 'Web logos' },
+    fileType: '',
+    fileSize: '',
+    updatedAt: '',
     description: {
-      de: 'Optimierte Logoversionen in verschiedenen Webformaten und HD-Auflösungen für Hotelwebsites, Banner und Social Media.',
-      it: 'Versioni ottimizzate del logo in vari formati web e risoluzioni HD per siti hotel, banner e social media.',
-      en: 'Optimized logo formats for hotel websites, digital banners, and social media.'
+      de: 'Geplante Ressource. Derzeit liegt kein verifizierter Dateilink vor.',
+      it: 'Risorsa prevista. Al momento non è disponibile un collegamento verificato al file.',
+      en: 'Planned resource. No verified file link is currently available.'
     },
-    downloadUrl: '#'
+    downloadUrl: ''
   },
   {
     id: 'dl-map-1000km',
-    title: {
-      de: 'Gesamte Loipenkarte 1.000 km (Hohe Auflösung)',
-      it: 'Cartina Generale Tracciati 1.000 km (Alta Risoluzione)',
-      en: 'Overall 1,000 km Trail Map (High Resolution)'
-    },
     category: 'maps',
-    fileType: 'PDF',
-    fileSize: '32.1 MB',
-    updatedAt: {
-      de: 'Dezember 2025',
-      it: 'Dicembre 2025',
-      en: 'December 2025'
-    },
+    title: { de: 'Loipenkarten', it: 'Mappe delle piste', en: 'Trail maps' },
+    fileType: '',
+    fileSize: '',
+    updatedAt: '',
     description: {
-      de: 'Druckfähige offizielle Übersichtskarte mit allen 8 Regionen, Einstiegspunkten und Loipenverbindungen.',
-      it: 'Mappa panoramica ufficiale stampabile con il dettaglio delle 8 aree, ingressi piste e collegamenti del carosello.',
-      en: 'Printable official map showing all 8 regions, track entry points, and connections.'
+      de: 'Geplante Ressource. Derzeit liegt kein verifizierter Dateilink vor.',
+      it: 'Risorsa prevista. Al momento non è disponibile un collegamento verificato al file.',
+      en: 'Planned resource. No verified file link is currently available.'
     },
-    downloadUrl: '#'
+    downloadUrl: ''
   },
   {
     id: 'dl-partner-flyer',
-    title: {
-      de: 'Gäste-Info-Flyer für Hotels (A4 / A5)',
-      it: 'Flyer Informativo per gli Ospiti dell\'Hotel (A4 / A5)',
-      en: 'Hotel Guest Info Flyer (A4 / A5)'
-    },
     category: 'flyer',
-    fileType: 'PDF',
-    fileSize: '6.5 MB',
-    updatedAt: {
-      de: 'Dezember 2025',
-      it: 'Dicembre 2025',
-      en: 'December 2025'
-    },
+    title: { de: 'Gäste-Flyer', it: 'Flyer per gli ospiti', en: 'Guest flyers' },
+    fileType: '',
+    fileSize: '',
+    updatedAt: '',
     description: {
-      de: 'Dreisprachiger Infoflyer (DE/IT/EN) druckfertig für die Zimmermappe oder die Rezeption.',
-      it: 'Prospetto informativo trilingue (IT/DE/EN) pronto per la stampa o da inserire nella cartella d\'informazione in camera.',
-      en: 'Trilingual informational flyer (IT/DE/EN) ready for printing or room info folders.'
+      de: 'Geplante Ressource. Derzeit liegt kein verifizierter Dateilink vor.',
+      it: 'Risorsa prevista. Al momento non è disponibile un collegamento verificato al file.',
+      en: 'Planned resource. No verified file link is currently available.'
     },
-    downloadUrl: '#'
+    downloadUrl: ''
   },
   {
     id: 'dl-social-kit',
-    title: {
-      de: 'Social Media Kit & Web-Banner 2026',
-      it: 'Kit Social Media & Banner Web 2026',
-      en: 'Social Media Kit & Web Banners 2026'
-    },
     category: 'social',
-    fileType: 'ZIP',
-    fileSize: '45.0 MB',
-    updatedAt: {
-      de: 'Januar 2026',
-      it: 'Gennaio 2026',
-      en: 'January 2026'
-    },
+    title: { de: 'Social-Media-Material', it: 'Materiale social media', en: 'Social media assets' },
+    fileType: '',
+    fileSize: '',
+    updatedAt: '',
     description: {
-      de: 'Grafiken für Instagram, Facebook und Webbanner mit der Aufschrift "Offizieller Partnerbetrieb Dolomiti NordicSki".',
-      it: 'Visual per Instagram, Facebook e banner web animati con dicitura "Partner Ufficiale Dolomiti NordicSki".',
-      en: 'Visual assets for Instagram, Facebook, and web banners with "Official Dolomiti NordicSki Partner" badge.'
+      de: 'Geplante Ressource. Derzeit liegt kein verifizierter Dateilink vor.',
+      it: 'Risorsa prevista. Al momento non è disponibile un collegamento verificato al file.',
+      en: 'Planned resource. No verified file link is currently available.'
     },
-    downloadUrl: '#'
+    downloadUrl: ''
   }
 ];
 

@@ -50,7 +50,7 @@ export const DownloadsSection: React.FC<DownloadsSectionProps> = ({ lang, a11y, 
   const [newTitle, setNewTitle] = useState<string>('');
   const [newCategory, setNewCategory] = useState<string>('logos');
   const [newFileType, setNewFileType] = useState<string>('PDF');
-  const [newFileSize, setNewFileSize] = useState<string>('4.5 MB');
+  const [newFileSize, setNewFileSize] = useState<string>('');
   const [newDescription, setNewDescription] = useState<string>('');
   const [newDownloadUrl, setNewDownloadUrl] = useState<string>('');
 
@@ -68,8 +68,8 @@ export const DownloadsSection: React.FC<DownloadsSectionProps> = ({ lang, a11y, 
           title: d.title || 'Nuovo Materiale',
           category: d.category || 'logos',
           fileType: d.fileType || 'PDF',
-          fileSize: d.fileSize || '1.0 MB',
-          updatedAt: d.updatedAt || new Date().toISOString().slice(0, 10),
+          fileSize: d.fileSize || '',
+          updatedAt: d.updatedAt || '',
           description: d.description || '',
           downloadUrl: d.downloadUrl || '',
           createdViaAdmin: true
@@ -85,7 +85,7 @@ export const DownloadsSection: React.FC<DownloadsSectionProps> = ({ lang, a11y, 
 
   const handleCreateMaterialBox = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newTitle.trim()) return;
+    if (!newTitle.trim() || !/^https?:\/\/\S+$/i.test(newDownloadUrl.trim())) return;
 
     setIsSubmitting(true);
     try {
@@ -93,10 +93,10 @@ export const DownloadsSection: React.FC<DownloadsSectionProps> = ({ lang, a11y, 
         title: newTitle.trim(),
         category: newCategory,
         fileType: newFileType,
-        fileSize: newFileSize || '2.5 MB',
+        fileSize: newFileSize.trim(),
         updatedAt: new Date().toISOString().slice(0, 10),
-        description: newDescription || 'Materiale ufficiale caricato dalla Direzione Generale.',
-        downloadUrl: newDownloadUrl || 'https://www.dolomitinordicski.com',
+        description: newDescription.trim(),
+        downloadUrl: newDownloadUrl.trim(),
         createdAt: new Date().toISOString(),
         createdViaAdmin: true
       });
@@ -124,37 +124,25 @@ export const DownloadsSection: React.FC<DownloadsSectionProps> = ({ lang, a11y, 
     }
   };
 
-  const handleTriggerDownload = (item: DownloadItem) => {
-    const title = getLoc(item.title, lang);
-    setDownloadNotification(`${title} (${item.fileType})`);
-    
-    // Create an actual dummy blob file to trigger browser download
-    const dummyContent = `%PDF-1.5 %Dolomiti NordicSki Official Document
-Document: ${title}
-Format: ${item.fileType}
-Size: ${item.fileSize}
-Category: ${item.category}
-Generated: ${new Date().toISOString()}
-Dolomiti NordicSki - 1.000 km Cross-Country Carousel`;
-    
-    const blob = new Blob([dummyContent], { type: 'application/pdf' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${title.toLowerCase().replace(/[^a-z0-9]/g, '_')}_dolomiti_nordicski.${item.fileType.toLowerCase()}`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+  const hasDownloadUrl = (item: DownloadItem): boolean => {
+    try {
+      const url = new URL(item.downloadUrl || '');
+      return url.protocol === 'https:' || url.protocol === 'http:';
+    } catch {
+      return false;
+    }
+  };
 
-    setTimeout(() => setDownloadNotification(null), 3500);
+  const handleTriggerDownload = (item: DownloadItem) => {
+    if (!hasDownloadUrl(item)) return;
+    window.open(item.downloadUrl, '_blank', 'noopener,noreferrer');
   };
 
   const categories = [
     { id: 'all', label: { it: 'Tutti i File', de: 'Alle Dateien', en: 'All Files' } },
-    { id: 'logos', label: { it: 'Loghi Vettoriali', de: 'Vektor-Logos', en: 'Vector Logos' } },
+    { id: 'logos', label: { it: 'Loghi', de: 'Logos', en: 'Logos' } },
     { id: 'brand-manual', label: { it: 'Manuale Corporate', de: 'Handbuch', en: 'Brand Manual' } },
-    { id: 'maps', label: { it: 'Cartine Piste 1.000 km', de: 'Loipenkarten', en: 'Trail Maps' } },
+    { id: 'maps', label: { it: 'Mappe delle piste', de: 'Loipenkarten', en: 'Trail Maps' } },
     { id: 'flyer', label: { it: 'Flyer & Info Camere', de: 'Flyer & Info', en: 'Guest Flyers' } },
     { id: 'social', label: { it: 'Kit Social Media', de: 'Social Kit', en: 'Social Media Kit' } }
   ];
@@ -199,9 +187,9 @@ Dolomiti NordicSki - 1.000 km Cross-Country Carousel`;
             <p className={`text-sm sm:text-base leading-relaxed max-w-3xl ${
               isLight ? 'text-[#417483]' : 'text-slate-200'
             }`}>
-              {lang === 'it' && 'Scarica i pacchetti vettoriali dei loghi ufficiali 2026, la mappa completa in alta risoluzione delle 8 aree (1.000 km di piste), i prospetti informativi trilingui per le camere degli ospiti ed il kit social media.'}
-              {lang === 'de' && 'Laden Sie hochauflösende Vektorlogos, komplette Loipenkarten der 8 Regionen (1.000 km) sowie Informationsflyer für Hotelzimmer herunter.'}
-              {lang === 'en' && 'Download 2026 vector logos, high-resolution 1,000 km trail maps, guest room information flyers, and social media kits.'}
+              {lang === 'it' && 'Consulta le risorse per i partner. I materiali sono disponibili solo quando esiste un collegamento verificato.'}
+              {lang === 'de' && 'Partnerressourcen im Überblick. Dateien können nur mit einem verifizierten Link geöffnet werden.'}
+              {lang === 'en' && 'Browse partner resources. Materials can only be opened when a verified file link is available.'}
             </p>
           </div>
 
@@ -298,7 +286,7 @@ Dolomiti NordicSki - 1.000 km Cross-Country Carousel`;
                         ? 'bg-[#F0F5F6] text-[#0D4D5E] border-[#82B2BD]' 
                         : 'bg-[#052832] text-[#AAD0D1] border-[#417483]/30'
                   }`}>
-                    {item.fileType} • {item.fileSize}
+                    {[item.fileType, item.fileSize].filter(Boolean).join(' • ') || (hasDownloadUrl(item) ? 'File' : (lang === 'de' ? 'Geplant' : lang === 'it' ? 'Previsto' : 'Planned'))}
                     {item.createdViaAdmin && ' • DB ADMIN'}
                   </span>
 
@@ -306,8 +294,8 @@ Dolomiti NordicSki - 1.000 km Cross-Country Carousel`;
                     <span className={`text-[10px] font-medium flex items-center space-x-1 ${
                       isLight ? 'text-[#417483]' : 'text-slate-300'
                     }`}>
-                      <Calendar className="w-3 h-3" />
-                      <span>{getLoc(item.updatedAt, lang)}</span>
+                      {getLoc(item.updatedAt, lang) && <Calendar className="w-3 h-3" />}
+                      {getLoc(item.updatedAt, lang) && <span>{getLoc(item.updatedAt, lang)}</span>}
                     </span>
 
                     {isAdmin && item.createdViaAdmin && (
@@ -352,10 +340,12 @@ Dolomiti NordicSki - 1.000 km Cross-Country Carousel`;
 
                 <button
                   onClick={() => handleTriggerDownload(item)}
-                  className="px-4 py-2 rounded-xl bg-[#0D4D5E] hover:bg-[#083845] border border-[#82B2BD]/40 text-[#AAD0D1] font-extrabold text-xs flex items-center space-x-2 transition-all shadow-md cursor-pointer"
+                  disabled={!hasDownloadUrl(item)}
+                  title={!hasDownloadUrl(item) ? (lang === "de" ? "Datei noch nicht verfügbar" : lang === "it" ? "File non ancora disponibile" : "File not yet available") : undefined}
+                  className="px-4 py-2 rounded-xl bg-[#0D4D5E] hover:bg-[#083845] border border-[#82B2BD]/40 text-[#AAD0D1] font-extrabold text-xs flex items-center space-x-2 transition-all shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Download className="w-3.5 h-3.5 text-[#AAD0D1]" />
-                  <span>Download</span>
+                  <span>{hasDownloadUrl(item) ? "Download" : lang === "de" ? "Nicht verfügbar" : lang === "it" ? "Non disponibile" : "Unavailable"}</span>
                 </button>
               </div>
             </div>
@@ -462,7 +452,7 @@ Dolomiti NordicSki - 1.000 km Cross-Country Carousel`;
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-200 block">URL o Link Download (Opzionale Google Drive)</label>
+                <label className="text-xs font-bold text-slate-200 block">URL del materiale (obbligatorio)</label>
                 <input
                   type="url"
                   value={newDownloadUrl}
@@ -509,7 +499,7 @@ Dolomiti NordicSki - 1.000 km Cross-Country Carousel`;
               </div>
               <div className="space-y-1">
                 <span className="text-[10px] font-mono font-bold uppercase px-2.5 py-0.5 rounded bg-[#052832] border border-[#417483]/40 text-[#AAD0D1]">
-                  DOCUMENTO UFFICIALE B2B • {previewItem.fileType} ({previewItem.fileSize})
+                  {lang === 'de' ? 'MATERIALINFORMATION' : lang === 'it' ? 'INFORMAZIONI MATERIALE' : 'MATERIAL INFORMATION'}
                 </span>
                 <h3 className="text-xl font-extrabold text-white leading-tight">
                   {getLoc(previewItem.title, lang)}
@@ -517,34 +507,15 @@ Dolomiti NordicSki - 1.000 km Cross-Country Carousel`;
               </div>
             </div>
 
-            {/* Simulated Document Preview Canvas */}
-            <div className="p-6 rounded-xl bg-white text-slate-900 border-2 border-[#0D4D5E] space-y-4 shadow-inner">
-              <div className="flex items-center justify-between border-b pb-3 border-slate-200">
-                <span className="font-black text-[#0D4D5E] text-lg">DOLOMITI NORDICSKI</span>
-                <span className="text-xs font-mono font-bold bg-[#0D4D5E] text-white px-2 py-0.5 rounded">
-                  {previewItem.fileType} PREVIEW
-                </span>
-              </div>
-
-              <div className="space-y-2 text-xs">
-                <p className="font-medium text-slate-800 leading-relaxed">
-                  {getLoc(previewItem.description, lang)}
-                </p>
-                <div className="p-3 rounded-lg bg-slate-50 border border-slate-200 space-y-1 text-[11px]">
-                  <span className="font-bold text-[#0D4D5E] block">Specifiche e Risoluzione:</span>
-                  <ul className="list-disc list-inside text-slate-600 space-y-0.5">
-                    <li>Formato file: {previewItem.fileType} alta risoluzione vettoriale / PDF</li>
-                    <li>Dimensione pacchetto: {previewItem.fileSize}</li>
-                    <li>Ultimo aggiornamento: {getLoc(previewItem.updatedAt, lang)}</li>
-                    <li>Uso consentito: Strutture ricettive e partner accreditati Dolomiti NordicSki</li>
-                  </ul>
-                </div>
-              </div>
-
-              <div className="text-[10px] font-mono text-slate-400 text-center pt-2">
-                Dolomiti NordicSki &bull; 1.000 km Cross-Country Carousel &bull; Offizielles Dokument
-              </div>
-            </div>
+             {/* Metadata only; not a simulated file preview. */}
+             <div className="p-5 rounded-xl bg-[#052832] border border-[#417483]/40 space-y-3 text-sm text-slate-200">
+               <p>{getLoc(previewItem.description, lang)}</p>
+               <p className="text-xs">
+                 {hasDownloadUrl(previewItem)
+                   ? (lang === 'de' ? 'Materialbeschreibung, keine Dateivorschau.' : lang === 'it' ? 'Descrizione del materiale, non anteprima del file.' : 'Material description, not a file preview.')
+                   : (lang === 'de' ? 'Keine verifizierte Datei verfügbar.' : lang === 'it' ? 'Nessun file verificato disponibile.' : 'No verified file available.')}
+               </p>
+             </div>
 
             {/* Actions */}
             <div className="flex items-center justify-end space-x-3 pt-2">
@@ -559,10 +530,10 @@ Dolomiti NordicSki - 1.000 km Cross-Country Carousel`;
                   handleTriggerDownload(previewItem);
                   setPreviewItem(null);
                 }}
-                className="px-6 py-2.5 rounded-xl bg-[#0D4D5E] hover:bg-[#083845] border border-[#AAD0D1]/50 text-[#AAD0D1] font-extrabold text-xs flex items-center space-x-2 shadow-lg cursor-pointer"
+                className="px-6 py-2.5 rounded-xl bg-[#0D4D5E] hover:bg-[#083845] border border-[#AAD0D1]/50 text-[#AAD0D1] font-extrabold text-xs flex items-center space-x-2 shadow-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Download className="w-4 h-4" />
-                <span>Scarica Documento Ora ({previewItem.fileType})</span>
+                <span>{hasDownloadUrl(previewItem) ? (lang === "de" ? "Datei öffnen" : lang === "it" ? "Apri file" : "Open file") : (lang === "de" ? "Nicht verfügbar" : lang === "it" ? "Non disponibile" : "Unavailable")}</span>
               </button>
             </div>
 
