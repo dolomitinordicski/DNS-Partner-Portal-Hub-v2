@@ -40,7 +40,7 @@ export const WidgetCreator: React.FC<WidgetCreatorProps> = ({ lang, accessLevel 
   const isLight = !!activePalette.isLight;
 
   const { embedCode } = createWidgetEmbed({
-    selectedRegion, widgetLang, themePreset, backgroundColor: currentBgColor,
+    selectedRegion, widgetLang, themePreset, layout, backgroundColor: currentBgColor,
     includeTrails, includeWeather, includePrices, includeBadge
   });
 
