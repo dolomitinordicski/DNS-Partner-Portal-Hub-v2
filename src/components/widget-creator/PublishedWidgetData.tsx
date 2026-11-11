@@ -10,6 +10,14 @@ interface Props { lang: Language; snapshot: PublicWidgetSnapshot | null; regionN
 
 export function PublishedWidgetData({ lang, snapshot, regionName, includeTrails, includeWeather, includePrices, paletteColor, isLight, areaId, layout }: Props) {
   const label = lang === 'de' ? 'Veröffentlichte Daten' : lang === 'it' ? 'Dati pubblicati' : 'Published data';
+  const productLabel: Record<string, [string, string, string]> = {
+    day: ['Tageskarte', 'Giornaliero', 'Day pass'],
+    'wk-area': ['Wochenkarte Gebiet', 'Settimanale area', 'Area weekly pass'],
+    'wk-dns': ['Wochenkarte DNS', 'Settimanale DNS', 'DNS weekly pass'],
+    'sk-area': ['Saisonkarte Gebiet', 'Stagionale area', 'Area season pass'],
+    'sk-dns': ['Saisonkarte DNS', 'Stagionale DNS', 'DNS season pass'],
+    'sk-instructor': ['Saisonkarte Skilehrer', 'Stagionale maestro', 'Instructor season pass'],
+  };
   const priceItems = snapshot?.pricing.status === 'available'
     ? snapshot.pricing.items.filter(p => p.currency === 'EUR' && Number.isFinite(p.amount) && p.amount >= 0)
     : [];
@@ -73,8 +81,8 @@ export function PublishedWidgetData({ lang, snapshot, regionName, includeTrails,
           </div>{weather?.observedAt && <p className="text-xs" style={{ color: c.mid }}>{tr('Stand', 'Rilevazione', 'Observed')}: {observationLabel(weather.observedAt)}</p>}
         </div>}
         {includePrices && <div className="space-y-2">
-          <h4 className="text-xs font-bold uppercase tracking-wider" style={{ color: c.mid }}>{tr('Loipenpass-Tarife', 'Prezzi skipass', 'Pass prices')}</h4>
-          {priceItems.length > 0 ? <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">{priceItems.map(p => <div key={p.productCode} className="rounded-md p-4" style={{ background: c.background }}><p className="text-xs">{p.productCode}</p><p className="text-lg font-bold" style={{ color: c.deep }}>{new Intl.NumberFormat(lang, { style: 'currency', currency: p.currency }).format(p.amount)}</p></div>)}</div> : <p className="text-sm">{tr('Preise nicht verfügbar', 'Prezzi non disponibili', 'Prices unavailable')}</p>}
+          <h4 className="text-xs font-bold uppercase tracking-wider" style={{ color: c.mid }}>{tr('Loipenpass-Tarife', 'Tariffe sci di fondo', 'Cross-country pass prices')}</h4>
+          {priceItems.length > 0 ? <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">{priceItems.map(p => <div key={p.productCode} className="rounded-md p-4" style={{ background: c.background }}><p className="text-xs">{productLabel[p.productCode]?.[lang === 'de' ? 0 : lang === 'it' ? 1 : 2] ?? p.productCode}</p><p className="text-lg font-bold" style={{ color: c.deep }}>{new Intl.NumberFormat(lang, { style: 'currency', currency: p.currency }).format(p.amount)}</p></div>)}</div> : <p className="text-sm">{tr('Preise nicht verfügbar', 'Prezzi non disponibili', 'Prices unavailable')}</p>}
         </div>}
       </div>
       <footer className={compact ? "px-5 py-2 flex flex-wrap items-center justify-between gap-3 text-[10px] font-semibold" : "px-5 sm:px-7 py-3 flex flex-wrap items-center justify-between gap-4 text-xs font-semibold"} style={{ borderTop: '1px solid ' + c.border, color: c.mid }}><span>Powered by Dolomiti NordicSki</span>{areaId !== "all" && <img src={DNS_SHARED_WEB_LOGO_URL} alt="Dolomiti NordicSki" className="ml-auto max-h-12 max-w-32 object-contain" />}</footer>
