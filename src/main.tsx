@@ -2,6 +2,7 @@ import {StrictMode} from 'react';
 import {createRoot} from 'react-dom/client';
 import App from './App.tsx';
 import { WidgetEmbedPage } from './components/widget-creator/WidgetEmbedPage';
+import { PublicWidgetCreatorPage } from './components/widget-creator/PublicWidgetCreatorPage';
 import './tailwind.css';
 // Local bundled font files: no request to third-party font CDNs at runtime.
 import '@fontsource/be-vietnam-pro/400.css';
@@ -28,8 +29,11 @@ initDNSShellRuntime('portal');
 initDNSFooterRuntime();
 initDNSNavigationStyles();
 
+const params = new URLSearchParams(window.location.search);
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    {new URLSearchParams(window.location.search).get('dnsWidget') === '1' ? <WidgetEmbedPage /> : <App />}
+    {params.get('dnsWidget') === '1' ? <WidgetEmbedPage /> :
+      params.get('dnsCreator') === '1' ? <PublicWidgetCreatorPage /> : <App />}
   </StrictMode>,
 );
