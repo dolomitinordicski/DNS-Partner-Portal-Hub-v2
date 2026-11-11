@@ -31,7 +31,8 @@
     "vite": "^6.2.3",
     "@dolomitinordicski/dns-shared-data": "git+https://github.com/dolomitinordicski/dns-shared-data.git",
     "@fontsource/be-vietnam-pro": "^5.3.0",
-    "@fontsource/roboto": "^5.3.0"
+    "@fontsource/roboto": "^5.3.0",
+    "firebase-admin": "^13.5.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
