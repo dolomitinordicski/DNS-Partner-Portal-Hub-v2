@@ -17,3 +17,14 @@ This PR adds a **server-only** `authorizeHubAnalyticsAccess` preflight and tests
 ## Security caveat
 
 This preflight accepts a verifier function as a dependency to keep it testable. Only the future trusted server integration may provide that function; it MUST NOT accept claims decoded without signature verification. `allowed:true` is **not** a token and not permission to read Firestore directly. A private repository or UI login alone cannot secure JavaScript data embedded in GitHub Pages.
+
+
+## Staged Partner Hub Google login (PR #78, not deployed)
+- Browser uses the existing DNS Core Firebase application configured through `VITE_DNS_FIREBASE_*` variables.
+- `VITE_DNS_PARTNER_LOGIN_ENABLED` defaults to **false**. The login modal has no active Google button unless explicitly enabled.
+- Server mounts `POST /api/partner/session` only as an OFF-by-default endpoint: `DNS_PARTNER_LOGIN_ENABLED` defaults to **false** and returns 404 when disabled.
+- The authenticated user presents a Firebase ID token to the Hub backend via an Authorization header. Server calls Firebase Admin `verifyIdToken(token, true)` and checks active, verified `partnerHubMemberships` for that UID. Missing records deny.
+- UI grants only a provisional `partner` presentation role after a positive server reply. Protected data services MUST still verify the token, membership and explicit Analytics grants on each request. No Analytics iframe is enabled.
+- The membership schema (future trusted provisioning) is one document per membership with `uid`, `establishmentId`, `active: true`, `status: "verified"`; browser writes are never allowed. The collection currently has no public client rules.
+- Before enablement: create a trusted Admin-only provisioning workflow, test multiple establishments and revocation, validate production identity project/hosting/Authorized Domains and separate partner accounts, then conduct real browser sign-in/refresh/logout tests.
+- **Do not enable either flag merely because tests compile.** Those flags need explicit release approval together with the membership registry and backend authorization gates.
