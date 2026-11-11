@@ -8,6 +8,11 @@ test('preflight route is unavailable by default and never returns Analytics data
   app.use(express.json());
   mountAnalyticsPreflight(app,false);
   const server=app.listen(0,'127.0.0.1');
+  await new Promise<void>((resolve,reject)=>{
+    if(server.listening) {resolve();return;}
+    server.once('listening',resolve);
+    server.once('error',reject);
+  });
   try {
     const addr=server.address();
     assert.ok(addr && typeof addr!=='string');
