@@ -13,7 +13,7 @@
     "check:canonical-areas": "node scripts/check-canonical-areas.mjs",
     "check:corporate-foundation": "node scripts/check-corporate-foundation.mjs",
     "check:quality-foundation": "node scripts/check-quality-foundation.mjs",
-    "test:analytics-access": "node --import tsx --test server/analyticsAccess.test.ts server/analyticsPreflightRoute.test.ts"
+    "test:analytics-access": "node --import tsx --test server/analyticsAccess.test.ts server/analyticsPreflightRoute.test.ts server/partnerSessionRoute.test.ts"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",
