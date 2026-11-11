@@ -1,5 +1,6 @@
 import express from "express";
 import { mountAnalyticsPreflight } from "./server/analyticsPreflightRoute";
+import { mountPartnerSession } from "./server/partnerSessionRoute";
 import path from "path";
 import { createServer as createViteServer } from "vite";
 
@@ -12,6 +13,7 @@ async function startServer() {
   // Off by default: never expose a Hub -> Analytics session pathway until
   // DNS Admin explicitly enables it after membership verification tests.
   mountAnalyticsPreflight(app, process.env.DNS_ANALYTICS_PREFLIGHT_ENABLED === "true");
+  mountPartnerSession(app, process.env.DNS_PARTNER_LOGIN_ENABLED === "true");
 
   // API Route to send voucher email notifications to info@dolomitinordicski.com
   // Fail closed: the legacy endpoint accepted unverified voucher requests and
