@@ -9,10 +9,11 @@
     "start": "node dist/server.cjs",
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit",
-    "check": "npm run check:canonical-areas && npm run check:corporate-foundation && npm run check:quality-foundation && npm run lint && npm run build",
+    "check": "npm run check:canonical-areas && npm run check:corporate-foundation && npm run check:quality-foundation && npm run test:analytics-access && npm run lint && npm run build",
     "check:canonical-areas": "node scripts/check-canonical-areas.mjs",
     "check:corporate-foundation": "node scripts/check-corporate-foundation.mjs",
-    "check:quality-foundation": "node scripts/check-quality-foundation.mjs"
+    "check:quality-foundation": "node scripts/check-quality-foundation.mjs",
+    "test:analytics-access": "node --import tsx --test server/analyticsAccess.test.ts server/analyticsPreflightRoute.test.ts server/partnerSessionRoute.test.ts"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",
@@ -30,7 +31,8 @@
     "vite": "^6.2.3",
     "@dolomitinordicski/dns-shared-data": "git+https://github.com/dolomitinordicski/dns-shared-data.git",
     "@fontsource/be-vietnam-pro": "^5.3.0",
-    "@fontsource/roboto": "^5.3.0"
+    "@fontsource/roboto": "^5.3.0",
+    "firebase-admin": "^13.5.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",

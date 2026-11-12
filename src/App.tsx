@@ -13,6 +13,8 @@ import { WidgetCreator } from './components/WidgetCreator';
 import { PortalNavigation } from './components/PortalNavigation';
 import { PortalHome } from './components/PortalHome';
 import { PartnerLoginModal } from './components/PartnerLoginModal';
+import { subscribeDNSPartnerIdentity, loadVerifiedPartnerSession } from './services/partnerIdentity';
+import { partnerSignOut } from './lib/firebase';
 import { CookieConsent } from './components/CookieConsent';
 import { LegalModal, LegalTab } from './components/LegalModal';
 
@@ -57,18 +59,43 @@ export default function App() {
     reducedMotion: false,
   });
 
-  // Role elevation is disabled until the server-authenticated DNS grant integration is ready.
+  // No role comes from browser input. Verify signed identity against the
+  // trusted server each time Firebase Auth changes; deny on all failures.
   const handleLoginSuccess = (_code: string, _name: string, _role?: 'partner' | 'regional' | 'admin') => {
-    setAccessLevel('public');
-    setPartnerCode('');
-    setPartnerName('');
+    // Legacy callback intentionally cannot elevate permissions.
   };
+
+  useEffect(() => {
+    if (import.meta.env.VITE_DNS_PARTNER_LOGIN_ENABLED !== 'true') return;
+    let generation = 0;
+    let controller: AbortController | null = null;
+    const unsubscribe = subscribeDNSPartnerIdentity(user => {
+      const current = ++generation;
+      controller?.abort();
+      controller = new AbortController();
+      setAccessLevel('public');
+      setPartnerCode('');
+      setPartnerName('');
+      if (!user || user.isAnonymous) return;
+      void loadVerifiedPartnerSession(user,controller.signal).then(session => {
+        if (current !== generation || !session || !session.establishments.length) return;
+        // This is a presentation role only. Every protected API must still
+        // verify identity, establishment membership and Analytics grant.
+        setAccessLevel('partner');
+        setPartnerCode(session.establishments[0].id);
+        setPartnerName(session.establishments[0].name);
+        setIsLoginModalOpen(false);
+      }).catch(() => { /* Fail closed. */ });
+    });
+    return () => { generation++;controller?.abort();unsubscribe(); };
+  }, []);
 
   const handleSelectDemoRole = (_role: AccessLevel) => {
     // A browser action must never assign a privileged DNS role.
   };
 
   const handleLogout = () => {
+    void partnerSignOut();
     setAccessLevel('public');
     setPartnerCode('');
     setPartnerName('');
